@@ -5,10 +5,65 @@ var path = require('path');
 var app = express();
 app.use(morgan('combined'));
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'index.html'));
-});
+var articleOne={
+    title:'Article one | Karthik Suresh',
+    heading:'Article one',
+    date:'February 4,2017',
+    content:`
+            <p>
+                This is the content for my first article.
+            </p>
+            <p>
+                This is some random stuff I am typing.
+            </p>
+            <p> This is also random.
+            </p>`
+};
 
+
+function createTempalate(data){
+    var title=data.title;
+    var date=data.date;
+    var content=data.content;
+    var heading=data.heading;
+
+var htmlTemplate =`
+<html>
+    <head>
+        <title>
+            ${title}
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale-1"/>
+         <link href="/ui/style.css" rel="stylesheet" />           
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div>    
+            <a href='/'>Home</a>
+            </div>
+            <hr/>
+            <h3>
+               ${heading}
+            </h3>
+            <div>
+                ${date}
+            </div>
+            <div>
+                 ${content}
+            </div>
+        </div>
+    </body>
+</html>
+
+
+`;
+return htmlTemplate;
+}
+
+app.get('/', function (req, res) {
+  res.send(createTemplate(articleOne));
+});
 app.get('/article-one', function(req,res){
      res.sendFile(path.join(__dirname, 'ui', 'article-one.html'));
 });
