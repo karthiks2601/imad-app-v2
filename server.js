@@ -5,22 +5,50 @@ var path = require('path');
 var app = express();
 app.use(morgan('combined'));
 
-var articleOne={
-    title:'Article one | Karthik Suresh',
-    heading:'Article one',
-    date:'February 4,2017',
-    content:`
-            <p>
-                This is the content for my first article.
-            </p>
-            <p>
-                This is some random stuff I am typing.
-            </p>
-            <p> This is also random.
-            </p>`
+var articles={
+    'article-one':{
+        title:'Article one | Karthik Suresh',
+        heading:'Article one',
+        date:'February 4,2017',
+        content:`
+                <p>
+                    This is the content for my first article.
+                </p>
+                <p>
+                    This is some random stuff I am typing.
+                </p>
+                <p> This is also random.
+                </p>`
+    },
+    'article-two':{
+        title:'Article two | Karthik Suresh',
+        heading:'Article two',
+        date:'February 14,2017',
+        content:`
+                <p>
+                    This is the content for my second article.
+                </p>
+                <p>
+                    Digital Design by Mano and Ciletti
+                </p>
+                <p> Signals and systems by Oppenheim and Wilsky.
+                </p>`
+    },
+    'article-three':{ 
+        title:'Article three | Karthik Suresh',
+        heading:'Article three',
+        date:'February 24,2017',
+        content:`
+                <p>
+                    This is the content for my third article.
+                </p>
+                <p>
+                    Digital Design by Wakerly
+                </p>
+                <p> Signals and systems by B P Lathi.
+                </p>`
+    },
 };
-
-
 function createTempalate(data){
     var title=data.title;
     var date=data.date;
@@ -55,24 +83,21 @@ var htmlTemplate =`
         </div>
     </body>
 </html>
-
-
 `;
 return htmlTemplate;
 }
 
 app.get('/', function (req, res) {
-  res.send(createTemplate(articleOne));
+  res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
-app.get('/article-one', function(req,res){
-     res.sendFile(path.join(__dirname, 'ui', 'article-one.html'));
+
+app.get('/:articleName', function(req,res){
+   //articleName=article-one
+    var articleName=req.params.articleName;
+     res.send(createTemplate(articles[articleName]));
 });
-app.get('/article-two', function(req,res){
-    res.sendFile(path.join(__dirname, 'ui', 'article-two.html'));
-});
-app.get('/article-three', function(req,res){
-    res.sendFile(path.join(__dirname, 'ui', 'article-three.html'));
-});
+
+
 app.get('/ui/style.css', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'style.css'));
 });
